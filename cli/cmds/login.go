@@ -6,22 +6,22 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/bdgroup/config"
 	"github.com/olekukonko/tablewriter"
 	"github.com/urfave/cli"
-	"turato.com/bdntoy/config"
 )
 
-//Login login data
+// Login login data
 type Login struct {
 	bduss   string
 	stoken  string
 	cookies string
 }
 
-//LoginConfig config
+// LoginConfig config
 var LoginConfig Login
 
-//NewLoginCommand login command
+// NewLoginCommand login command
 func NewLoginCommand() []cli.Command {
 	return []cli.Command{
 		{

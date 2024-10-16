@@ -2,8 +2,9 @@ package config
 
 import (
 	"net/http"
+	"time"
 
-	"turato.com/bdntoy/service"
+	"github.com/bdgroup/service"
 )
 
 // BdnInfo 百度网盘登录信息
@@ -30,14 +31,14 @@ func (info *BdnInfo) IsValid() bool {
 	return info.Bduss != "" && info.Stoken != ""
 }
 
-//Service geek time service
+// Service geek time service
 func (info *BdnInfo) Service() *service.Service {
 	ser := service.NewService(info.Bduss, info.Stoken)
 
 	return ser
 }
 
-//SetBdnInfoByBdussAndStoken 设置用户
+// SetBdnInfoByBdussAndStoken 设置用户
 func (c *ConfigsData) SetBdnInfoByBdussAndStoken(bduss, stoken string) (*BdnInfo, error) {
 	s := service.NewService(bduss, stoken)
 	bdnInfo := &BdnInfo{
@@ -59,7 +60,7 @@ func (c *ConfigsData) SetBdnInfoByBdussAndStoken(bduss, stoken string) (*BdnInfo
 	return bdnInfo, nil
 }
 
-//SetBdnInfoByCookies 设置用户
+// SetBdnInfoByCookies 设置用户
 func (c *ConfigsData) SetBdnInfoByCookies(cookies string) (*BdnInfo, error) {
 	// 解析cookie
 	cs := cookieHeader(cookies)
@@ -92,6 +93,10 @@ func (c *ConfigsData) SetBdnInfoByCookies(cookies string) (*BdnInfo, error) {
 	}
 	bdnInfo.User = user
 	c.BdnInfo = *bdnInfo
+	bduser, err := service.GetUserByUK(user.Uk)
+	if nil == bduser {
+		service.InsertUser(rsp.LoginInfo.Username, rsp.LoginInfo.UkStr, string(time.UnixDate), string(time.UnixDate), cookies)
+	}
 	return bdnInfo, nil
 }
 
@@ -102,7 +107,7 @@ func cookieHeader(rawCookies string) []*http.Cookie {
 	return req.Cookies()
 }
 
-//SetGid 缓存gid
+// SetGid 缓存gid
 func (c *ConfigsData) SetGid(gid string) {
 	c.BdnInfo.Gid = gid
 	return
@@ -112,13 +117,13 @@ func (c *ConfigsData) GetGid() string {
 	return c.BdnInfo.Gid
 }
 
-//SetGidList 缓存gid列表
+// SetGidList 缓存gid列表
 func (c *ConfigsData) SetGidList(gidList []string) {
 	c.BdnInfo.Gids = gidList
 	return
 }
 
-//SetFsIdList 缓存fsid列表
+// SetFsIdList 缓存fsid列表
 func (c *ConfigsData) SetFsIdList(fsIdList []string) {
 	c.BdnInfo.FsIds = fsIdList
 	return
@@ -128,12 +133,12 @@ func (c *ConfigsData) GetMsgId() string {
 	return c.BdnInfo.MsgId
 }
 
-//SetMsgId 缓存msgId
+// SetMsgId 缓存msgId
 func (c *ConfigsData) SetMsgId(msgId string) {
 	c.BdnInfo.MsgId = msgId
 }
 
-//ActiveService user service
+// ActiveService user service
 func (c *ConfigsData) ActiveService() *service.Service {
 	if c.service == nil {
 		c.service = c.BdnInfo.Service()

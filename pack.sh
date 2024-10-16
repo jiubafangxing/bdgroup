@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROJECT_NAME="bdntoy"
+PROJECT_NAME="bdgroup"
 VERSION=v0.0.3
 RELEASE_NAME="${PROJECT_NAME}-${VERSION}"
 OUTPUT_DIR="bin" # 打包目录

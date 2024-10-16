@@ -1,4 +1,4 @@
-# bdntoy
+# bdgroup
 
 - **名称含义**: baidu netdisk toy, 百度网盘玩具
 - **背景**：截止2024.3.17，百度不支持用户检索文件库中文件的路径，所以不方便用户保存想要的部分分享目录，只能保存到自己网盘再查看，但内容太多，全部保存网盘空间不够。
@@ -12,25 +12,25 @@
 ## 使用
 
 ### 登录:
-登录后会保存配置在目标路径，通过指定 BDNTOY_GO_CONFIG_DIR，可以设置配置保存的目录。 
+登录后会保存配置在目标路径，通过指定 bdgroup_GO_CONFIG_DIR，可以设置配置保存的目录。 
 
-配置名为 config.json,保存路径，默认 /HOME/.config/bdntoy 或者 /tmp
+配置名为 config.json,保存路径，默认 /HOME/.config/bdgroup 或者 /tmp
 
 
 
 - 使用 cookie 登录
 ```shell
-bdntoy login --cookies '你的cookie'
+bdgroup login --cookies '你的cookie'
 ```
 或者：
 ```shell
-bdntoy login --bduss 'asdasd' --stoken '12312as'
+bdgroup login --bduss 'asdasd' --stoken '12312as'
 ```
 
 ### 获取会话列表
 
 ```shell
-bdntoy hs
+bdgroup hs
 ```
 
 输出示例：
@@ -45,17 +45,17 @@ bdntoy hs
 
 选择会话
 ```shell
-bdntoy hs 0
+bdgroup hs 0
 ```
 
 ### 获取通讯录中的群组
 ```shell
-bdntoy gs
+bdgroup gs
 ```
 
 选择群组:
 ```shell
-bdntoy gs 0
+bdgroup gs 0
 ```
 
 ```text

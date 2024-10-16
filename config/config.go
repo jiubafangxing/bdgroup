@@ -11,12 +11,12 @@ import (
 
 	"github.com/goccy/go-json"
 
-	"turato.com/bdntoy/service"
+	"github.com/bdgroup/service"
 )
 
 const (
 	// EnvConfigDir 配置路径环境变量
-	EnvConfigDir = "BDNTOY_GO_CONFIG_DIR"
+	EnvConfigDir = "bdgroup_GO_CONFIG_DIR"
 	// ConfigName 配置文件名
 	ConfigName = "config.json"
 )
@@ -28,7 +28,7 @@ var (
 	Instance = NewConfig(configFilePath)
 )
 
-//ConfigsData 配置数据
+// ConfigsData 配置数据
 type ConfigsData struct {
 	BdnInfo    BdnInfo
 	outputPath string
@@ -39,7 +39,7 @@ type ConfigsData struct {
 	service        *service.Service
 }
 
-//Init 初始化配置
+// Init 初始化配置
 func (c *ConfigsData) Init() error {
 	if c.configFilePath == "" {
 		return ErrConfigFilePathNotSet
@@ -60,7 +60,7 @@ func (c *ConfigsData) Init() error {
 	return nil
 }
 
-//Save 保存配置
+// Save 保存配置
 func (c *ConfigsData) Save() error {
 	err := c.lazyOpenConfigFile()
 	if err != nil {
@@ -152,7 +152,7 @@ func (c *ConfigsData) lazyOpenConfigFile() (err error) {
 	return nil
 }
 
-//NewConfig new config
+// NewConfig new config
 func NewConfig(configFilePath string) *ConfigsData {
 	c := &ConfigsData{
 		configFilePath: configFilePath,
@@ -172,10 +172,10 @@ func NewConfig(configFilePath string) *ConfigsData {
 //
 //	home, ok := os.LookupEnv("HOME")
 //	if ok {
-//		return filepath.Join(home, ".config", "bdntoy")
+//		return filepath.Join(home, ".config", "bdgroup")
 //	}
 //
-//	return filepath.Join("/tmp", "bdntoy")
+//	return filepath.Join("/tmp", "bdgroup")
 //}
 
 func GetConfigDir() string {
@@ -189,10 +189,10 @@ func GetConfigDir() string {
 
 	home := getWindowsUserProfile()
 	if home != "" {
-		return filepath.Join(home, ".config", "bdntoy")
+		return filepath.Join(home, ".config", "bdgroup")
 	}
 
-	return filepath.Join("/tmp", "bdntoy")
+	return filepath.Join("/tmp", "bdgroup")
 }
 
 // getWindowsUserProfile retrieves the Windows user profile path.

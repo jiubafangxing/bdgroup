@@ -1,8 +1,8 @@
 package application
 
-import "turato.com/bdntoy/service"
+import "github.com/bdgroup/service"
 
-//Sessions 会话列表
+// Sessions 会话列表
 func Sessions() ([]*service.BdHistorySessionRecord, error) {
 	return getService().GetHistorySession()
 }

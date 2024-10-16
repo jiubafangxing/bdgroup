@@ -4,7 +4,7 @@ import (
 	"errors"
 	"io"
 
-	"turato.com/bdntoy/utils"
+	"github.com/bdgroup/utils"
 )
 
 type resultData []byte

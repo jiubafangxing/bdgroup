@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"turato.com/bdntoy/pkg/requester"
+	"github.com/bdgroup/pkg/requester"
 )
 
 var (

@@ -1,8 +1,8 @@
 package application
 
 import (
-	"turato.com/bdntoy/config"
-	"turato.com/bdntoy/service"
+	"github.com/bdgroup/config"
+	"github.com/bdgroup/service"
 )
 
 func getService() *service.Service {

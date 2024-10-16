@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"turato.com/bdntoy/pkg/requester"
+	"github.com/bdgroup/pkg/requester"
 )
 
 var (
@@ -14,12 +14,12 @@ var (
 	}
 )
 
-//Service bdnetdisk service
+// Service bdnetdisk service
 type Service struct {
 	client *requester.Client
 }
 
-//NewService new service
+// NewService new service
 func NewService(bduss, stoken string) *Service {
 	client := requester.NewHTTPClient()
 	client.ResetCookieJar()
@@ -38,7 +38,7 @@ func NewService(bduss, stoken string) *Service {
 	return &Service{client: client}
 }
 
-//Cookies get cookies string
+// Cookies get cookies string
 func (s *Service) Cookies() map[string]string {
 	return s.client.Cookies(geekBangCommURL)
 }

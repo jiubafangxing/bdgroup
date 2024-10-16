@@ -7,14 +7,14 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/bdgroup/cli/application"
+	"github.com/bdgroup/config"
+	"github.com/bdgroup/service"
 	"github.com/olekukonko/tablewriter"
 	"github.com/urfave/cli"
-	"turato.com/bdntoy/cli/application"
-	"turato.com/bdntoy/config"
-	"turato.com/bdntoy/service"
 )
 
-//NewBdCommand login command
+// NewBdCommand login command
 func NewBdCommand() []cli.Command {
 	return []cli.Command{
 		{

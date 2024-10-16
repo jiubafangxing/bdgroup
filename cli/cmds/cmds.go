@@ -7,10 +7,10 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/bdgroup/cli/version"
+	"github.com/bdgroup/config"
+	"github.com/bdgroup/pkg/logger"
 	"github.com/urfave/cli"
-	"turato.com/bdntoy/cli/version"
-	"turato.com/bdntoy/config"
-	"turato.com/bdntoy/pkg/logger"
 )
 
 var (
@@ -34,7 +34,7 @@ var (
 	}
 )
 
-//NewApp cli app
+// NewApp cli app
 func NewApp() *cli.App {
 	app := cli.NewApp()
 	app.Name = appName
@@ -62,7 +62,7 @@ func NewApp() *cli.App {
 	return app
 }
 
-//DefaultAction default action
+// DefaultAction default action
 func DefaultAction(c *cli.Context) error {
 	if len(c.Args()) == 0 {
 		cli.ShowAppHelp(c)
