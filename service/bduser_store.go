@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
 	"log"
+	"time"
 )
 
 // User 结构体代表数据库中的用户记录
@@ -11,8 +12,8 @@ type BDUser struct {
 	ID            int
 	Username      string
 	UK            string
-	CreateTime    string
-	LastLoginTime string
+	CreateTime    time.Time
+	LastLoginTime time.Time
 	Cookies       string
 }
 
@@ -32,9 +33,8 @@ func init() {
 
 	// 2. 创建表
 	createTableSQL := `CREATE TABLE IF NOT EXISTS bd_user (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
 		username TEXT NOT NULL,
-		uk TEXT UNIQUE,
+		uk TEXT   PRIMARY KEY,
 		create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
 		last_login_time DATETIME,
 		cookies TEXT
@@ -61,12 +61,12 @@ func GetUserByUK(uk string) (*BDUser, error) {
 }
 
 // InsertUser 插入新用户
-func InsertUser(username, uk, createTime, lastLoginTime, cookies string) (int64, error) {
+func InsertUser(username, uk string, createTime, lastLoginTime time.Time, cookies string) (int64, error) {
 	stmt, err := db.Prepare(`INSERT INTO bd_user (username, uk, create_time, last_login_time, cookies) VALUES (?, ?, ?, ?, ?);`)
 	if err != nil {
 		return 0, err
 	}
-	result, err := stmt.Exec(username, uk, createTime, lastLoginTime, cookies)
+	result, err := stmt.Exec(username, uk, createTime.Format("2006-01-02 15:04:05"), lastLoginTime.Format("2006-01-02 15:04:05"), cookies)
 	if err != nil {
 		return 0, err
 	}
@@ -75,4 +75,32 @@ func InsertUser(username, uk, createTime, lastLoginTime, cookies string) (int64,
 		return 0, err
 	}
 	return id, nil
+}
+
+// UpdateUser 更新用户信息
+func UpdateUser(uk string, cookies string, lastLoginTime time.Time) error {
+	// 准备 SQL 更新语句
+	stmt, err := db.Prepare(`UPDATE bd_user SET cookies = ?, last_login_time = ? WHERE uk = ?;`)
+	if err != nil {
+		return err
+	}
+	// 执行更新操作
+	_, err = stmt.Exec(cookies, lastLoginTime.Format("2006-01-02 15:04:05"), uk)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func GetByUserName(userName string) (*BDUser, error) {
+	var user BDUser
+	err := db.QueryRow(`SELECT id, username, uk, create_time, last_login_time, cookies FROM bd_user WHERE username = ?;`, userName).Scan(&user.ID, &user.Username, &user.UK, &user.CreateTime, &user.LastLoginTime, &user.Cookies)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil // 没有找到记录，返回nil
+		} else {
+			return nil, err // 发生错误，返回错误信息
+		}
+	}
+	return &user, nil // 成功找到记录，返回User指针
 }

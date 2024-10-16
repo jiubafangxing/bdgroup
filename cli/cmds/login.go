@@ -3,8 +3,10 @@ package cmds
 import (
 	"errors"
 	"fmt"
+	"github.com/bdgroup/service"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/bdgroup/config"
 	"github.com/olekukonko/tablewriter"
@@ -70,11 +72,18 @@ func loginAction(c *cli.Context) error {
 		return nil
 	}
 	if cookies != "" {
-		bdnInfo, err = config.Instance.SetBdnInfoByCookies(cookies)
+		bduser, err := config.Instance.SetBdnInfoByCookies(cookies)
+		existUser, err := service.GetUserByUK(bduser.UK)
+		curtime := time.Now()
+		if nil == existUser {
+			service.InsertUser(bduser.Username, bduser.UK, curtime, curtime, cookies)
+		} else {
+			service.UpdateUser(bduser.UK, cookies, curtime)
+		}
 		if err != nil {
 			return err
 		}
-		fmt.Printf("百度网盘登录验证登录成功, 昵称:%s,bdstoken:%s", bdnInfo.Username, bdnInfo.Bdstoken)
+		fmt.Printf("百度网盘登录验证登录成功, 昵称:%s,", bduser.Username)
 		return nil
 	}
 

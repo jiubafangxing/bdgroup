@@ -1,10 +1,9 @@
 package config
 
 import (
-	"net/http"
-	"time"
-
 	"github.com/bdgroup/service"
+	"net/http"
+	"strconv"
 )
 
 // BdnInfo 百度网盘登录信息
@@ -61,7 +60,7 @@ func (c *ConfigsData) SetBdnInfoByBdussAndStoken(bduss, stoken string) (*BdnInfo
 }
 
 // SetBdnInfoByCookies 设置用户
-func (c *ConfigsData) SetBdnInfoByCookies(cookies string) (*BdnInfo, error) {
+func (c *ConfigsData) SetBdnInfoByCookies(cookies string) (*service.BDUser, error) {
 	// 解析cookie
 	cs := cookieHeader(cookies)
 	var BDUSS string
@@ -85,19 +84,13 @@ func (c *ConfigsData) SetBdnInfoByCookies(cookies string) (*BdnInfo, error) {
 	if err != nil {
 		return nil, err
 	}
-	user := User{
-		Bdstoken: rsp.LoginInfo.Bdstoken,
-		PhotoUrl: rsp.LoginInfo.PhotoUrl,
-		Uk:       rsp.LoginInfo.Uk,
+	user := &service.BDUser{
+		UK:       strconv.Itoa(rsp.LoginInfo.Uk),
 		Username: rsp.LoginInfo.Username,
+		Cookies:  cookies,
 	}
-	bdnInfo.User = user
 	c.BdnInfo = *bdnInfo
-	bduser, err := service.GetUserByUK(user.Uk)
-	if nil == bduser {
-		service.InsertUser(rsp.LoginInfo.Username, rsp.LoginInfo.UkStr, string(time.UnixDate), string(time.UnixDate), cookies)
-	}
-	return bdnInfo, nil
+	return user, nil
 }
 
 func cookieHeader(rawCookies string) []*http.Cookie {
