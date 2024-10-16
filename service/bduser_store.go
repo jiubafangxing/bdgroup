@@ -92,6 +92,7 @@ func UpdateUser(uk string, cookies string, lastLoginTime time.Time) error {
 	return nil
 }
 
+// 依据用户名查询用户
 func GetByUserName(userName string) (*BDUser, error) {
 	var user BDUser
 	err := db.QueryRow(`SELECT id, username, uk, create_time, last_login_time, cookies FROM bd_user WHERE username = ?;`, userName).Scan(&user.ID, &user.Username, &user.UK, &user.CreateTime, &user.LastLoginTime, &user.Cookies)
