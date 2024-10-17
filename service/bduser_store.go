@@ -94,7 +94,7 @@ func UpdateUser(uk string, cookies string, lastLoginTime time.Time) error {
 // 依据用户名查询用户
 func GetByUserName(userName string) (*BDUser, error) {
 	var user BDUser
-	err := db.QueryRow(`SELECT id, username, uk, create_time, last_login_time, cookies FROM bd_user WHERE username = ?;`, userName).Scan(&user.Username, &user.UK, &user.CreateTime, &user.LastLoginTime, &user.Cookies)
+	err := db.QueryRow(`SELECT  username, uk, create_time, last_login_time, cookies FROM bd_user WHERE username = ?;`, userName).Scan(&user.Username, &user.UK, &user.CreateTime, &user.LastLoginTime, &user.Cookies)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil // 没有找到记录，返回nil
@@ -103,4 +103,27 @@ func GetByUserName(userName string) (*BDUser, error) {
 		}
 	}
 	return &user, nil // 成功找到记录，返回User指针
+}
+
+func QueryUsernames() ([]string, error) {
+	rows, err := db.Query(`SELECT username FROM bd_user`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var usernames []string
+	for rows.Next() {
+		var username string
+		if err := rows.Scan(&username); err != nil {
+			return nil, err
+		}
+		usernames = append(usernames, username)
+	}
+
+	// 检查rows.Next()循环是否因错误中止
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return usernames, nil
 }

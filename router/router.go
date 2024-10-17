@@ -19,4 +19,5 @@ func LoadRoutes(r *gin.Engine) {
 	r.GET("/groups", groups())
 	r.POST("/GetShareGroupFileList", GetShareGroupFileList())
 	r.POST("/GetShareFiles", GetShareFiles())
+	r.GET("/users", users())
 }

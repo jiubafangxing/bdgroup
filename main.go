@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/bdgroup/config"
+	"github.com/bdgroup/config/ginconfig"
 	"github.com/bdgroup/pkg/logger"
 	"github.com/bdgroup/router"
 	"github.com/gin-gonic/gin"
@@ -32,8 +33,8 @@ func init() {
 func main() {
 	// 创建一个默认的路由引擎
 	app := gin.Default()
+	app.Use(ginconfig.CORSMiddleware())
 	router.LoadRoutes(app)
-
 	// 启动 HTTP 服务，监听在 8080 端口
-	app.Run(":8080")
+	app.Run(":8081")
 }

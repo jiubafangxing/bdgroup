@@ -9,6 +9,21 @@ import (
 	"time"
 )
 
+func users() func(c *gin.Context) {
+	return func(c *gin.Context) {
+		usernames, err := service.QueryUsernames()
+		if err == nil {
+			c.JSON(http.StatusOK, gin.H{
+				"userNames": usernames,
+			})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+		}
+	}
+}
+
 // 设置Cookies，如果对应cookies是新用户则新增
 func setCookies() func(c *gin.Context) {
 	return func(c *gin.Context) {
@@ -19,7 +34,7 @@ func setCookies() func(c *gin.Context) {
 		if err := c.ShouldBindJSON(&json); err == nil {
 			bdnInfo, err := config.Instance.SetBdnInfoByCookies(json.BDCookies)
 			if err != nil {
-				c.JSON(http.StatusBadGateway, gin.H{
+				c.JSON(http.StatusInternalServerError, gin.H{
 					"error": err.Error(),
 				})
 			} else {
