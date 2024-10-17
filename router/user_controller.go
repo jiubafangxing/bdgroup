@@ -23,11 +23,13 @@ func setCookies() func(c *gin.Context) {
 					"error": err.Error(),
 				})
 			} else {
-				c.JSON(http.StatusOK, gin.H{
-					"username": bdnInfo.Username,
-				})
+
 				curtime := time.Now()
-				if nil == bdnInfo {
+				existUser, err := service.GetUserByUK(bdnInfo.UK)
+				if nil != err {
+					return
+				}
+				if nil == existUser {
 					_, err := service.InsertUser(bdnInfo.Username, bdnInfo.UK, curtime, curtime, bdnInfo.Cookies)
 					if err != nil {
 						return
@@ -39,6 +41,9 @@ func setCookies() func(c *gin.Context) {
 					}
 				}
 				log.Printf("百度网盘登录验证登录成功, 昵称:%s", bdnInfo.Username)
+				c.JSON(http.StatusOK, gin.H{
+					"username": bdnInfo.Username,
+				})
 			}
 			return
 		} else {

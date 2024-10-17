@@ -17,4 +17,6 @@ func LoadRoutes(r *gin.Engine) {
 	r.POST("/setCookies", setCookies())
 	r.POST("/swatchUser", swatchUser())
 	r.GET("/groups", groups())
+	r.POST("/GetShareGroupFileList", GetShareGroupFileList())
+	r.POST("/GetShareFiles", GetShareFiles())
 }

@@ -9,7 +9,6 @@ import (
 
 // User 结构体代表数据库中的用户记录
 type BDUser struct {
-	ID            int
 	Username      string
 	UK            string
 	CreateTime    time.Time
@@ -49,7 +48,7 @@ func init() {
 // GetUserByUK 查询指定uk的用户信息
 func GetUserByUK(uk string) (*BDUser, error) {
 	var user BDUser
-	err := db.QueryRow(`SELECT id, username, uk, create_time, last_login_time, cookies FROM bd_user WHERE uk = ?;`, uk).Scan(&user.ID, &user.Username, &user.UK, &user.CreateTime, &user.LastLoginTime, &user.Cookies)
+	err := db.QueryRow(`SELECT  username, uk, create_time, last_login_time, cookies FROM bd_user WHERE uk = ?;`, uk).Scan(&user.Username, &user.UK, &user.CreateTime, &user.LastLoginTime, &user.Cookies)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil // 没有找到记录，返回nil
@@ -95,7 +94,7 @@ func UpdateUser(uk string, cookies string, lastLoginTime time.Time) error {
 // 依据用户名查询用户
 func GetByUserName(userName string) (*BDUser, error) {
 	var user BDUser
-	err := db.QueryRow(`SELECT id, username, uk, create_time, last_login_time, cookies FROM bd_user WHERE username = ?;`, userName).Scan(&user.ID, &user.Username, &user.UK, &user.CreateTime, &user.LastLoginTime, &user.Cookies)
+	err := db.QueryRow(`SELECT id, username, uk, create_time, last_login_time, cookies FROM bd_user WHERE username = ?;`, userName).Scan(&user.Username, &user.UK, &user.CreateTime, &user.LastLoginTime, &user.Cookies)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil // 没有找到记录，返回nil

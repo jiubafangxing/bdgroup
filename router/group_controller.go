@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/bdgroup/cli/application"
+	"github.com/bdgroup/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -14,10 +15,44 @@ func groups() func(c *gin.Context) {
 			c.JSON(http.StatusBadGateway, gin.H{
 				"error": err.Error(),
 			})
+		} else {
+			c.JSON(http.StatusOK, gin.H{
+				"groups": shareGroups,
+			})
 		}
-		c.JSON(http.StatusOK, gin.H{
-			"groups": shareGroups,
-		})
 
+	}
+}
+
+func GetShareGroupFileList() func(c *gin.Context) {
+	return func(c *gin.Context) {
+		gid := c.Query("gid")
+		files, err := application.FileLibraries(gid)
+		if err != nil {
+			c.JSON(http.StatusBadGateway, gin.H{
+				"error": err.Error(),
+			})
+		} else {
+			c.JSON(http.StatusOK, gin.H{
+				"files": files,
+			})
+		}
+	}
+}
+func GetShareFiles() func(c *gin.Context) {
+	return func(c *gin.Context) {
+		var json service.ShareInfoParam
+		if err := c.ShouldBindJSON(&json); err == nil {
+			files, err := application.GetShareFiles(json)
+			if err != nil {
+				c.JSON(http.StatusBadGateway, gin.H{
+					"error": err.Error(),
+				})
+			} else {
+				c.JSON(http.StatusOK, gin.H{
+					"files": files,
+				})
+			}
+		}
 	}
 }
