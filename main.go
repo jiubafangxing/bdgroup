@@ -36,5 +36,5 @@ func main() {
 	app.Use(ginconfig.CORSMiddleware())
 	router.LoadRoutes(app)
 	// 启动 HTTP 服务，监听在 8080 端口
-	app.Run(":8081")
+	app.Run(":8080")
 }

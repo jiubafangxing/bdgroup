@@ -1,6 +1,7 @@
 package router
 
 import (
+	"fmt"
 	"github.com/bdgroup/cli/application"
 	"github.com/bdgroup/service"
 	"github.com/gin-gonic/gin"
@@ -53,6 +54,8 @@ func GetShareFiles() func(c *gin.Context) {
 					"files": files,
 				})
 			}
+		} else {
+			fmt.Println(err)
 		}
 	}
 }

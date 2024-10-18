@@ -75,7 +75,7 @@ func (c *Client) httpDo(req *http.Request) (*http.Response, error) {
 	return res, err
 }
 
-//HTTPGet 简单实现 http 访问 GET 请求
+// HTTPGet 简单实现 http 访问 GET 请求
 func (c *Client) HTTPGet(urlStr string) ([]byte, error) {
 	res, err := c.HTTPClient.Get(urlStr)
 
@@ -149,12 +149,13 @@ func (c *Client) Req(method string, urlStr string, post interface{}, header map[
 	}
 
 	req, err := http.NewRequest(method, urlStr, obody)
+	printRequestDetails(req)
 	if err != nil {
 		return nil, err
 	}
 
 	// 设置浏览器标识
-	req.Header.Set("User-Agent", c.UserAgent)
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36")
 
 	if header != nil {
 		for k, v := range header {
@@ -163,6 +164,30 @@ func (c *Client) Req(method string, urlStr string, post interface{}, header map[
 	}
 
 	return c.HTTPClient.Do(req)
+}
+func printRequestDetails(req *http.Request) {
+	// 打印请求方法
+	fmt.Println("Method:", req.Method)
+
+	// 打印请求的URL和Query参数
+	fmt.Println("URL:", req.URL.String())
+	fmt.Println("Query parameters:", req.URL.Query())
+
+	// 打印请求头
+	fmt.Println("Headers:")
+	for key, values := range req.Header {
+		for _, value := range values {
+			fmt.Printf("%s: %s\n", key, value)
+		}
+	}
+
+	// 如果请求有body并且需要打印它（假设是POST请求）
+	if req.Body != nil {
+		// 由于req.Body在读取后无法再次读取，因此需要从原始数据创建新的reader以打印出来
+		// 在真实应用中，最好避免直接打印Body
+		body := "Example body content" // 这里根据需要使用实际的Body内容
+		fmt.Println("Body:", body)
+	}
 }
 
 // Fetch 实现 http／https 访问，

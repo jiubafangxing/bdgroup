@@ -6,13 +6,13 @@ import (
 )
 
 type ShareInfoParam struct {
-	FromUk int64
-	ToUk   int64
-	MsgId  string
-	Num    int
-	Page   int
-	FsId   string
-	Gid    string
+	FromUk int64  `json:"from_uk"` // 将 JSON 字段 from_uk 解析为 FromUk
+	ToUk   int64  `json:"to_uk"`   // 将 JSON 字段 to_uk 解析为 ToUk
+	MsgId  string `json:"msg_id"`  // 将 JSON 字段 msg_id 解析为 MsgId
+	Num    int    `json:"num"`     // 将 JSON 字段 num 解析为 Num
+	Page   int    `json:"page"`    // 将 JSON 字段 page 解析为 Page
+	FsId   string `json:"fs_id"`   // 将 JSON 字段 fs_id 解析为 FsId
+	Gid    string `json:"gid"`     // 将 JSON 字段 gid 解析为 Gid
 }
 
 // 获取用户信息
@@ -23,7 +23,8 @@ func (s *Service) requestHistorySessions() (io.ReadCloser, error) {
 
 // 我的群组
 func (s *Service) requestShareGroups() (io.ReadCloser, error) {
-	res, err := s.client.Req("POST", "https://pan.baidu.com/mbox/group/list?clienttype=0&app_id=250528&web=1", nil, map[string]string{})
+	res, err := s.client.Req("POST", "https://pan.baidu.com/mbox/group/list?clienttype=0&app_id=250528&web=1&dp-logid=85740600462994540141&start=0&limit=100", nil, map[string]string{})
+
 	return handleHTTPResponse(res, err)
 }
 
